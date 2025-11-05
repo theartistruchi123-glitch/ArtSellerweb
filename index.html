@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArtConnect | Buy Artworks Directly</title>
+<style>
+  * {margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+  body {background:#fafafa;color:#333;scroll-behavior:smooth;}
+
+  header {
+    position:fixed;top:0;left:0;width:100%;
+    background:#111;color:#fff;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:15px 50px;z-index:1000;
+  }
+  header h1 {color:#ffb400;font-size:1.5rem;letter-spacing:2px;}
+  nav ul {list-style:none;display:flex;gap:20px;}
+  nav a {text-decoration:none;color:#fff;font-weight:500;transition:.3s;}
+  nav a:hover {color:#ffb400;}
+
+  section {padding:100px 50px;min-height:100vh;}
+
+  /* HOME */
+  #home {
+    background:url('https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  }
+  #home h2 {font-size:3rem;margin-bottom:15px;}
+  #home p {font-size:1.2rem;max-width:600px;}
+  #home a {
+    display:inline-block;margin-top:25px;padding:12px 30px;
+    background:#ffb400;color:#111;border-radius:5px;text-decoration:none;transition:.3s;
+  }
+  #home a:hover {background:#fff;color:#111;}
+
+  /* GALLERY */
+  #gallery h2 {text-align:center;font-size:2.5rem;margin-bottom:40px;}
+  .gallery-container {display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+  .art-card {
+    background:#fff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);
+    overflow:hidden;transition:transform .3s;cursor:pointer;
+  }
+  .art-card:hover {transform:translateY(-5px);}
+  .art-card img {width:100%;height:250px;object-fit:cover;}
+  .art-card .details {padding:15px;}
+  .art-card h3 {margin-bottom:8px;}
+  .art-card p {font-size:.9rem;color:#555;}
+  .art-card button {
+    margin-top:10px;padding:8px 15px;background:#ffb400;border:none;color:#111;
+    cursor:pointer;border-radius:5px;transition:.3s;
+  }
+  .art-card button:hover {background:#111;color:#fff;}
+
+  /* MODAL */
+  .modal {
+    display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.9);justify-content:center;align-items:center;
+    z-index:2000;flex-direction:column;padding:20px;overflow-y:auto;color:#fff;
+  }
+  .modal img {max-width:90%;max-height:60vh;border-radius:10px;object-fit:contain;}
+  .modal-content {max-width:600px;text-align:center;margin-top:20px;}
+  .modal-content h3 {font-size:2rem;margin-bottom:10px;}
+  .modal-content p {margin:8px 0;font-size:1.1rem;}
+  .modal-buttons {margin-top:20px;display:flex;justify-content:center;gap:15px;}
+  .modal-buttons button {
+    padding:12px 25px;border:none;border-radius:5px;cursor:pointer;font-weight:bold;transition:.3s;
+  }
+  .order {background:#25D366;color:#fff;}
+  .order:hover {background:#1da851;}
+  .cart {background:#ffb400;color:#111;}
+  .cart:hover {background:#fff;color:#111;}
+  .close-btn {
+    position:absolute;top:15px;right:25px;font-size:2rem;cursor:pointer;color:#ffb400;
+  }
+
+  /* CART SIDEBAR */
+  #cart {
+    position:fixed;top:50%;right:0;transform:translateY(-50%);
+    background:#111;color:#fff;width:300px;padding:20px;
+    border-radius:10px 0 0 10px;box-shadow:-2px 0 10px rgba(0,0,0,0.3);
+    display:none;flex-direction:column;gap:10px;z-index:2100;
+  }
+  #cart h3 {text-align:center;color:#ffb400;}
+  .cart-item {display:flex;justify-content:space-between;font-size:.9rem;border-bottom:1px solid #444;padding:5px 0;}
+  .checkout-btn {
+    background:#25D366;border:none;color:#fff;padding:10px;border-radius:5px;cursor:pointer;font-weight:bold;
+  }
+  .checkout-btn:hover {background:#1da851;}
+  .close-cart {
+    background:transparent;color:#ffb400;border:none;cursor:pointer;align-self:flex-end;font-size:1.5rem;
+  }
+
+  /* ABOUT */
+  #about {background:#fff;}
+  #about h2 {text-align:center;margin-bottom:25px;font-size:2.5rem;}
+  #about .content {max-width:800px;margin:auto;text-align:center;line-height:1.8;font-size:1.1rem;}
+
+  /* CONTACT */
+  #contact h2 {text-align:center;font-size:2.5rem;margin-bottom:30px;}
+  .connect-links {text-align:center;}
+  .connect-links a {
+    display:inline-block;margin:10px;padding:12px 25px;background:#ffb400;color:#111;
+    border-radius:5px;text-decoration:none;font-weight:bold;transition:.3s;
+  }
+  .connect-links a:hover {background:#111;color:#fff;}
+
+  footer {background:#111;color:#fff;text-align:center;padding:15px;font-size:.9rem;}
+  @media(max-width:768px){header{flex-direction:column;gap:10px;}#cart{width:90%;right:5%;border-radius:10px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ArtConnect</h1>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Connect</a></li>
+      <li><a href="#" onclick="toggleCart()">🛒</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="home">
+  <h2>Welcome to ArtConnect</h2>
+  <p>Explore and own beautiful artworks. Click on an artwork for details, add to cart, and order directly via WhatsApp.</p>
+  <a href="#gallery">Shop Now</a>
+</section>
+
+<section id="gallery">
+  <h2>Gallery</h2>
+  <div class="gallery-container" id="galleryContainer"></div>
+</section>
+
+<section id="about">
+  <h2>About the Artist</h2>
+  <div class="content">
+    <p>Hello! I'm <strong>[Your Name]</strong>, the creator behind ArtConnect.  
+    I’m an independent artist with a deep passion for transforming emotions and imagination into colors on canvas. Each artwork you see here is a reflection of my love for creativity, nature, and human expression.
+
+Through ArtConnect, I aim to bridge the gap between your vision and my art — creating pieces that truly speak to your heart and space. Whether it’s a vibrant painting for your home, a personalized portrait, or a custom-designed artwork that matches your taste and mood, I’m here to bring your ideas to life.
+
+Every piece is crafted with patience, emotion, and the highest attention to detail. I believe that art should not only decorate your wall — it should connect with your soul.
+
+If you have something special in mind, I’d love to hear from you. Let’s create something unique together — artwork made just for you, that tells your story.
+
+— [Mali Ruchi]
+Founder & Artist at ArtConnect
+
+✨ Why This Works</p>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Connect Directly</h2>
+  <div class="connect-links">
+    <a href="https://wa.me/7779034077" target="_blank">💬 WhatsApp</a>
+    <a href="https://www.instagram.com/theartist_ruchii?igsh=MXhsdjZjOHg3MHQzMg==" target="_blank">📸 Instagram</a>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 ArtConnect. All Rights Reserved.
+</footer>
+
+<!-- CART -->
+<div id="cart">
+  <button class="close-cart" onclick="toggleCart()">×</button>
+  <h3>Your Cart</h3>
+  <div id="cartItems"></div>
+  <p id="cartTotal" style="text-align:center;margin:10px 0;"></p>
+  <button class="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="artModal">
+  <span class="close-btn" onclick="closeModal()">&times;</span>
+  <img id="modalImage" src="" alt="">
+  <div class="modal-content">
+    <h3 id="modalTitle"></h3>
+    <p id="modalDesc"></p>
+    <p><strong>Price:</strong> $<span id="modalPrice"></span></p>
+    <div class="modal-buttons">
+      <button class="order" id="orderBtn">Order Now</button>
+      <button class="cart" id="addToCartBtn">Add to Cart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const phoneNumber = "YOUR_PHONE_NUMBER"; // e.g. 919876543210
+const artworks = [
+  {title:"Sunset Bliss",img:"WhatsApp Image 2025-11-05 at 10.05.21.jpeg",price:150,desc:"A serene sunset over calm waters."},
+  {title:"Mystic Forest",img:"WhatsApp Image 2025-11-05 at 10.05.22 (2).jpeg",price:200,desc:"A deep dive into the enchanted forest."},
+  {title:"Ocean Dreams",img:"WhatsApp Image 2025-11-05 at 10.05.20.jpeg",price:180,desc:"A vibrant expression of the ocean’s spirit."},
+
+  {title:"Sunset Bliss",img:"WhatsApp Image 2025-11-05 at 10.05.16.jpeg",price:150,desc:"A serene sunset over calm waters."},
+  {title:"Mystic Forest",img:"WhatsApp Image 2025-11-05 at 10.05.20 (1).jpeg",price:200,desc:"A deep dive into the enchanted forest."},
+  {title:"Ocean Dreams",img:"WhatsApp Image 2025-11-05 at 10.05.20 (2).jpeg",price:180,desc:"A vibrant expression of the ocean’s spirit."},
+
+  {title:"Sunset Bliss",img:"WhatsApp Image 2025-11-05 at 10.05.19.jpeg",price:150,desc:"A serene sunset over calm waters."},
+  {title:"Mystic Forest",img:"WhatsApp Image 2025-11-05 at 10.05.23.jpeg",price:200,desc:"A deep dive into the enchanted forest."},
+  {title:"Ocean Dreams",img:"WhatsApp Image 2025-11-05 at 10.05.22.jpeg",price:180,desc:"A vibrant expression of the ocean’s spirit."}
+];
+
+const galleryContainer=document.getElementById('galleryContainer');
+artworks.forEach(art=>{
+  const card=document.createElement('div');
+  card.className='art-card';
+  card.innerHTML=`
+    <img src="${art.img}" alt="${art.title}">
+    <div class="details">
+      <h3>${art.title}</h3>
+      <p>${art.desc}</p>
+      <p><strong>Price:</strong> $${art.price}</p>
+      <button onclick="addToCart('${art.title}',${art.price})">Add to Cart</button>
+    </div>`;
+  card.querySelector('img').addEventListener('click',()=>openModal(art));
+  galleryContainer.appendChild(card);
+});
+
+let cart=[];
+function addToCart(title,price){
+  const existing=cart.find(i=>i.title===title);
+  if(existing){existing.qty++;} else {cart.push({title,price,qty:1});}
+  updateCart();toggleCart(true);
+}
+function updateCart(){
+  const cartItems=document.getElementById('cartItems');
+  const cartTotal=document.getElementById('cartTotal');
+  cartItems.innerHTML='';let total=0;
+  cart.forEach(item=>{
+    total+=item.price*item.qty;
+    const div=document.createElement('div');
+    div.className='cart-item';
+    div.innerHTML=`<span>${item.title} x${item.qty}</span><span>$${item.price*item.qty}</span>`;
+    cartItems.appendChild(div);
+  });
+  cartTotal.textContent=total>0?`Total: $${total}`:"Your cart is empty.";
+}
+function toggleCart(forceOpen=false){
+  const cartDiv=document.getElementById('cart');
+  if(forceOpen){cartDiv.style.display='flex';}
+  else {cartDiv.style.display=cartDiv.style.display==='flex'?'none':'flex';}
+}
+function checkout(){
+  if(cart.length===0){alert("Your cart is empty!");return;}
+  let msg="Hello! I'd like to order the following artworks:\n\n";
+  let total=0;
+  cart.forEach(i=>{msg+=`${i.title} (x${i.qty}) - $${i.price*i.qty}\n`;total+=i.price*i.qty;});
+  msg+=`\nTotal: $${total}\nPlease provide shipping and payment info.`;
+  const url=`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
+}
+
+// Modal logic
+const modal=document.getElementById('artModal');
+const modalImage=document.getElementById('modalImage');
+const modalTitle=document.getElementById('modalTitle');
+const modalDesc=document.getElementById('modalDesc');
+const modalPrice=document.getElementById('modalPrice');
+const orderBtn=document.getElementById('orderBtn');
+const addToCartBtn=document.getElementById('addToCartBtn');
+
+function openModal(art){
+  modal.style.display='flex';
+  modalImage.src=art.img;
+  modalTitle.textContent=art.title;
+  modalDesc.textContent=art.desc;
+  modalPrice.textContent=art.price;
+  orderBtn.onclick=()=>orderNow(art);
+  addToCartBtn.onclick=()=>{addToCart(art.title,art.price);closeModal();};
+}
+function closeModal(){modal.style.display='none';}
+window.onclick=function(e){if(e.target==modal)closeModal();}
+
+function orderNow(art){
+  const msg=`Hello! I'd like to order the artwork "${art.title}" priced at $${art.price}. Please share shipping details.`;
+  const url=`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
+}
+</script>
+
+</body>
+</html>
